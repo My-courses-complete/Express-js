@@ -1,4 +1,4 @@
-const express = require('express');
+import express, { Request, Response} from 'express'
 const faker = require('faker');
 
 const app = express();
@@ -8,7 +8,7 @@ app.get('/', (req, res) => {
   res.send('Hello world')
 })
 
-app.get('/products', (req, res) => {
+app.get('/products', (req: Request, res: Response) => {
   const products = []
   const { size } = req.query
   const limit = size || 10
@@ -23,33 +23,13 @@ app.get('/products', (req, res) => {
   res.json(products)
 })
 
-app.get('/products/:id', (req, res) => {
-  const {id} = req.params
+app.get('/products/:id', (req: Request, res: Response) => {
+  const { id } = req.params
   res.json({
     id,
     name: 'products',
     price: 821349
   })
-})
-
-app.get('/category/:categoryId/product/:productId', (req, res) => {
-  const { categoryId, productId } = req.params
-  res.json({
-    categoryId,
-    productId,
-  })
-})
-
-app.get('/users', (req, res) => {
-  const { limit, offset } = req.query
-  if(limit && offset) {
-    res.json({
-      limit,
-      offset
-    })
-  } else {
-    res.send('No hay ningun valor')
-  }
 })
 
 app.listen(port, () =>{
