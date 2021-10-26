@@ -1,11 +1,13 @@
 import express, { Request, Response} from 'express'
+import cors from 'cors'
 
 import routerApi from './routes';
 import { logErrors, errorHandler, boomErrorHandler } from './middlewares/error.handler'
 
 const app = express();
-const port = 3000
+const port = process.env.PORT || 3000
 
+app.use(cors())
 app.use(express.json())
 routerApi(app)
 
