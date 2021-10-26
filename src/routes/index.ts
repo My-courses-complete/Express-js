@@ -1,8 +1,11 @@
-import { Express } from "express"
+import { Express, Router } from "express"
 import ProductsRouter from "./products"
 
+
 function routerApi(app: Express) {
-  app.use('/products', ProductsRouter)
+  const router = Router()
+  app.use('/api/v1', router)
+  router.use('/products', ProductsRouter)
 }
 
 export default routerApi
