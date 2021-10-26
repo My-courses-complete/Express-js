@@ -34,7 +34,7 @@ ProductsRouter.post('/', async (req: Request, res: Response) => {
   })
 })
 
-ProductsRouter.patch('/:id', async (req: Request, res: Response) => {
+ProductsRouter.patch('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
   const { id } = req.params
   const body = req.body
@@ -45,11 +45,11 @@ ProductsRouter.patch('/:id', async (req: Request, res: Response) => {
     id
   })
 } catch (err) {
-  res.status(404).json(err)
+  next(err)
 }
 })
 
-ProductsRouter.delete('/:id', async (req: Request, res: Response) => {
+ProductsRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params
     const rta = await serviceProducts.delete(id)
@@ -58,7 +58,7 @@ ProductsRouter.delete('/:id', async (req: Request, res: Response) => {
       ...rta
     })
   } catch (err) {
-    res.status(404).json(err)
+    next(err)
   }
   })
   
