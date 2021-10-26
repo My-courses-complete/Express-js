@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node dist/index.js",
+    "postinstall": "tsc",
     "dev": "ts-node-dev --respawn --pretty --transpile-only src/index.ts",
     "lint": "eslint"
   },
@@ -38,5 +39,8 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "joi": "^17.4.2"
+  },
+  "engines": {
+    "node": "14.x"
   }
 }
