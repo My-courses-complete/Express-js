@@ -33,6 +33,8 @@
     "typescript": "^4.4.4"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "@hapi/boom": "^9.1.4",
+    "express": "^4.17.1",
+    "joi": "^17.4.2"
   }
 }
