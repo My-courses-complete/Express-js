@@ -1,34 +1,24 @@
 import { Router, Request, Response } from 'express'
 import faker from 'faker'
+import ProductService from '../services/product'
 
 const ProductsRouter = Router()
+const serviceProducts = new ProductService()
 
 ProductsRouter.get('/', (req: Request, res: Response) => {
-  const products = []
-  const { size } = req.query
-  const limit = size || 10
-  for (let i = 0; i < limit; i++) {
-    products.push({
-      name: faker.commerce.productName(),
-      price: faker.commerce.price(),
-      image: faker.image.imageUrl()
-    })
-  }
+  const products = serviceProducts.find()
   res.json(products)
 })
 
 ProductsRouter.get('/:id', (req: Request, res: Response) => {
   const { id } = req.params
-  if(id === '999') {
+  const product = serviceProducts.findOne(id)
+  if(!id) {
     res.status(404).json({
       message: 'No products found'
     })
   }
-  res.json({
-    id,
-    name: 'Product 2',
-    price: 2000
-  })
+  res.json(product)
 })
 
 ProductsRouter.post('/', (req: Request, res: Response) => {
