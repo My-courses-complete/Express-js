@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express'
+import { Router, Request, Response, NextFunction } from 'express'
 import faker from 'faker'
 import ProductService from '../services/product'
 
@@ -10,15 +10,19 @@ ProductsRouter.get('/', async (req: Request, res: Response) => {
   res.json(products)
 })
 
-ProductsRouter.get('/:id', async (req: Request, res: Response) => {
-  const { id } = req.params
-  const product = await serviceProducts.findOne(id)
-  if(!id) {
-    res.status(404).json({
-      message: 'No products found'
-    })
+ProductsRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params
+    const product = await serviceProducts.findOne(id)
+    if(!id) {
+      res.status(404).json({
+        message: 'No products found'
+      })
+    }
+    res.json(product)
+  } catch (error) {
+    next(error)
   }
-  res.json(product)
 })
 
 ProductsRouter.post('/', async (req: Request, res: Response) => {
