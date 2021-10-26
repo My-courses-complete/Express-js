@@ -24,7 +24,7 @@ class ProductService {
     }
   }
 
-  create(data: ProductBase) {
+  async create(data: ProductBase) {
     const newProduct = {
       id: faker.datatype.uuid(),
       ...data
@@ -33,15 +33,15 @@ class ProductService {
     return newProduct;
   }
 
-  find() {
+  async find() {
     return this.products
   }
 
-  findOne(id: string) {
+  async findOne(id: string) {
     return this.products.find(item => item.id === id)
   }
 
-  update(id: string, changes: ProductBase) {
+  async update(id: string, changes: ProductBase) {
     const index = this.products.findIndex(item => item.id === id)
     if(index === -1) {
       throw new Error('Product not found')
@@ -51,7 +51,7 @@ class ProductService {
     return this.products[index]
   }
   
-  delete(id: string) {
+  async delete(id: string) {
     const index = this.products.findIndex(item => item.id === id)
     if(index === -1) {
       throw new Error('Product not found')

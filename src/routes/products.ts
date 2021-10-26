@@ -5,14 +5,14 @@ import ProductService from '../services/product'
 const ProductsRouter = Router()
 const serviceProducts = new ProductService()
 
-ProductsRouter.get('/', (req: Request, res: Response) => {
-  const products = serviceProducts.find()
+ProductsRouter.get('/', async (req: Request, res: Response) => {
+  const products = await serviceProducts.find()
   res.json(products)
 })
 
-ProductsRouter.get('/:id', (req: Request, res: Response) => {
+ProductsRouter.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params
-  const product = serviceProducts.findOne(id)
+  const product = await serviceProducts.findOne(id)
   if(!id) {
     res.status(404).json({
       message: 'No products found'
@@ -21,33 +21,41 @@ ProductsRouter.get('/:id', (req: Request, res: Response) => {
   res.json(product)
 })
 
-ProductsRouter.post('/', (req: Request, res: Response) => {
+ProductsRouter.post('/', async (req: Request, res: Response) => {
   const body = req.body
-  const newProduct = serviceProducts.create(body)
+  const newProduct = await serviceProducts.create(body)
   res.status(201).json({
     message: "product created",
     data: newProduct
   })
 })
 
-ProductsRouter.patch('/:id', (req: Request, res: Response) => {
+ProductsRouter.patch('/:id', async (req: Request, res: Response) => {
+  try {
   const { id } = req.params
   const body = req.body
-  const updatedProduct = serviceProducts.update(id, body)
+  const updatedProduct = await serviceProducts.update(id, body)
   res.json({
     message: "product update",
     data: updatedProduct,
     id
   })
+} catch (err) {
+  res.status(404).json(err)
+}
 })
 
-ProductsRouter.delete('/:id', (req: Request, res: Response) => {
-  const { id } = req.params
-  const rta = serviceProducts.delete(id)
-  res.json({
-    message: "product deleted",
-    ...rta
+ProductsRouter.delete('/:id', async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    const rta = await serviceProducts.delete(id)
+    res.json({
+      message: "product deleted",
+      ...rta
+    })
+  } catch (err) {
+    res.status(404).json(err)
+  }
   })
-})
-
-export default ProductsRouter
+  
+  export default ProductsRouter
