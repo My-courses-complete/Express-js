@@ -1,7 +1,12 @@
 import faker from 'faker'
 
+interface ProductBase { name: string, price: number, image: string}
+interface Product extends ProductBase {
+  id: string;
+}
+
 class ProductService {
-  products: { id: string, name: string, price: number, image: string}[]
+  products: Product[]
   constructor() {
     this.products = []
     this.generate()
@@ -19,7 +24,14 @@ class ProductService {
     }
   }
 
-  create() {}
+  create(data: ProductBase) {
+    const newProduct = {
+      id: faker.datatype.uuid(),
+      ...data
+    }
+    this.products.push(newProduct);
+    return newProduct;
+  }
 
   find() {
     return this.products
@@ -29,9 +41,24 @@ class ProductService {
     return this.products.find(item => item.id === id)
   }
 
-  update() {}
-
-  delete() {}
+  update(id: string, changes: ProductBase) {
+    const index = this.products.findIndex(item => item.id === id)
+    if(index === -1) {
+      throw new Error('Product not found')
+    }
+    const product = this.products[index]
+    this.products[index] = {...product, ...changes}
+    return this.products[index]
+  }
+  
+  delete(id: string) {
+    const index = this.products.findIndex(item => item.id === id)
+    if(index === -1) {
+      throw new Error('Product not found')
+    }
+    this.products.splice(index, 1)
+    return { id }
+  }
 }
 
 export default ProductService;
